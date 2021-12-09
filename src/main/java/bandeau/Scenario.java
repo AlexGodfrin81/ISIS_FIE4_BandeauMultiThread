@@ -43,16 +43,18 @@ public class Scenario {
      * @param b le bandeau ou s'afficher.
      * @throws java.lang.InterruptedException
      */
-    public synchronized void playOn(Bandeau b) {
+    public void playOn(Bandeau b) {
         
         Thread t = new Thread() {
             public void run(){
-                for (ScenarioElement element : myElements) {
-                    for (int repeats = 0; repeats < element.repeats; repeats++) {
-                        element.effect.playOn(b);
+                synchronized(b){
+                    for (ScenarioElement element : myElements) {
+                        for (int repeats = 0; repeats < element.repeats; repeats++) {
+                            element.effect.playOn(b);
+                        }
                     }
+                    System.out.println("Scénario finis");
                 }
-                System.out.println("Scénario finis");
             }
         };
         t.start();
